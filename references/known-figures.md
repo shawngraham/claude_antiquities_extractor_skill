@@ -37,15 +37,6 @@ Reference profiles of historically significant dealers, collectors, and official
 - **Notable Cases**: Euphronios krater (Getty Museum), various Greek vases
 - **Published Works**: Expert on Greek pottery attribution
 
-### Philippe Sands (Antiquities Dealer)
-- **Canonical ID**: `philippe_sands_dealer`
-- **Nationality**: British
-- **Activity Period**: 1960s–1980s
-- **Role**: Dealer, gallery owner
-- **Location**: London
-- **Specialization**: Egyptian and Near Eastern antiquities
-- **Known Activities**: Auction house connections, private sales
-
 ### Pasquale Camera
 - **Canonical ID**: `pasquale_camera`
 - **Nationality**: Italian
