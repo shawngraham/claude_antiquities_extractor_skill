@@ -1,6 +1,6 @@
 # Example: Extracting Data from Antiquities Trade Documentation
 
-This example demonstrates how to extract structured data from a realistic antiquities trade document.
+This example demonstrates how to extract structured data from a realistic antiquities trade document. This is a fabricated document.
 
 ## Sample Document
 
@@ -12,7 +12,7 @@ seized 47 Greek red-figure vases from a private warehouse in Geneva on March 15,
 artifacts, valued at approximately €2.3 million, are believed to have been looted from 
 archaeological sites in southern Italy during the 1970s and 1980s.
 
-"These pieces represent a significant cultural crime," said General Roberto Conforti, 
+"These pieces represent a significant cultural crime," said General Roberto Lanciani, 
 director of the Carabinieri's cultural heritage unit. "Many were obtained through the 
 antiquities dealer network centered on Giacomo Medici and Robert Hecht."
 
@@ -27,7 +27,7 @@ smuggling networks. The vases were subsequently sold through a chain of dealers 
 Medici in Geneva and eventually reached the London market.
 
 One particularly significant piece—a kylix attributed to the Penthesilea Painter—was 
-authenticated by expert Dr. Margaret Chen of Oxford University in 2009. Dr. Chen's 
+authenticated by expert Dr. Margaret Smith of Oxford University in 2009. Dr. smith's 
 certification was crucial to the piece's market value, though subsequent investigation 
 revealed documentation gaps for the 1975-2005 period.
 
@@ -88,10 +88,10 @@ proceedings and repatriation decisions.
       }
     },
     {
-      "canonical_id": "margaret_chen",
+      "canonical_id": "margaret_smith",
       "type": "PERSON",
-      "full_name": "Dr. Margaret Chen",
-      "mentions": ["Margaret Chen", "Dr. Chen"],
+      "full_name": "Dr. Margaret Smith",
+      "mentions": ["Margaret Smith", "Dr. Smith"],
       "attributes": {
         "role": "authenticator",
         "affiliation": "Oxford University",
@@ -99,10 +99,10 @@ proceedings and repatriation decisions.
       }
     },
     {
-      "canonical_id": "roberto_conforti",
+      "canonical_id": "roberto_lanciani",
       "type": "PERSON",
-      "full_name": "General Roberto Conforti",
-      "mentions": ["Roberto Conforti", "General Conforti"],
+      "full_name": "General Roberto Lanciani",
+      "mentions": ["Roberto Lanciani", "General Lanciani"],
       "attributes": {
         "role": "official",
         "nationality": "Italian",
@@ -276,7 +276,7 @@ proceedings and repatriation decisions.
     },
     {
       "source_id": "penthesilea_kylix_painter",
-      "target_id": "margaret_chen",
+      "target_id": "margaret_smith",
       "relation_type": "authenticated_by",
       "attributes": {
         "date": "2009",
@@ -322,7 +322,7 @@ proceedings and repatriation decisions.
       }
     },
     {
-      "source_id": "roberto_conforti",
+      "source_id": "roberto_lanciani",
       "target_id": "carabinieri_italy",
       "relation_type": "employed_by",
       "attributes": {
@@ -341,11 +341,11 @@ proceedings and repatriation decisions.
 
 1. **Multiple object seizure**: Rather than creating 47 separate ARTIFACT entities, used one aggregate entity with count attribute
 2. **Looting chain**: Captured the journey from site → clandestine diggers → local dealers → Medici → Mitchell → Moorman → seizure
-3. **Expert authentication**: Documented how Dr. Chen's authentication affected market value even though origin was questionable
+3. **Expert authentication**: Documented how Dr. smith's authentication affected market value even though origin was questionable
 4. **Institutional cooperation**: Getty Museum's voluntary disclosure captured as collaboration rather than possession
 5. **Uncertainty handling**: Used "confidence: medium" for Medici link where text implies but doesn't explicitly state the connection
 6. **Documentation gaps**: Noted the 1970-2005 gap in extraction_notes as significant red flag
-7. **Authority figures**: Roberto Conforti captured as both individual and employed-by relationship
+7. **Authority figures**: Roberto lanciani captured as both individual and employed-by relationship
 
 ## Validation Output
 
