@@ -17,15 +17,15 @@ Extract four main entity types, each with a specific canonical ID format:
 
 **PERSON**: Individuals involved in the trade
 - Canonical ID: `firstname_lastname` (lowercase, underscores)
-- Attributes: role, nationality, birth/death dates, known aliases, specialization
+- Attributes: role, nationality, birth/death dates, known aliases
 - Roles include: dealer, collector, looter, archaeologist, official, restorer, consultant, auction_house_official
 - Specialization: Geographic, temporal, or typological focus (e.g., "South-East Asian antiquities", "Greek pottery", "Egyptian Middle Kingdom artifacts")
 
 **ORGANIZATION**: Institutions and businesses
 - Canonical ID: `abbreviated_name` (e.g., `j_paul_getty_museum`, `christie_s`)
 - Add `entity_type`: museum, gallery, auction_house, law_enforcement, university, customs, government, restoration_lab
-- Attributes: location, founded_date, known_involvement (if any), collection_focus
-- Collection focus: Primary areas of collecting or dealing (e.g., "Pre-Columbian art", "Asian antiquities", "Classical Mediterranean")
+- Attributes: location, founded_date, known_involvement (if any)
+- Collection_focus: Primary areas of collecting or dealing (e.g., "Pre-Columbian art", "Asian antiquities", "Classical Mediterranean")
 
 **ARTIFACT**: Cultural objects
 - Canonical ID: `descriptive_identifier` (e.g., `euphronios_sarpedon_krater`, `egyptian_canopic_jar_louvre_e_14384`)
@@ -59,10 +59,9 @@ Identify connections between entities with these relation types:
 3. **Create canonical IDs** using the format guidelines—consistency is critical for later linking
 4. **Collect mentions** (all text variants: "Medici", "Giacomo Medici", "the dealer Medici")
 5. **Record attributes** from context clues, dates, roles, descriptions
-6. **Extract specializations** when text indicates areas of focus or expertise
-7. **Find relationships** by looking for verbs and actions: sold, looted, handled, recovered, authenticated, employed
-8. **Include dates** in relationship attributes whenever available
-9. **Note uncertainty** in attributes or mention uncertain relationships only if strongly indicated
+6. **Find relationships** by looking for verbs and actions: sold, looted, handled, recovered, authenticated, employed
+7. **Include dates** in relationship attributes whenever available
+8. **Note uncertainty** in attributes or mention uncertain relationships only if strongly indicated
 
 ## Key Extraction Principles
 
@@ -78,30 +77,27 @@ Identify connections between entities with these relation types:
 - **Track locations**: Every artifact should have provenance history (looted from, sold in, recovered from)
 - **Capture aliases**: Some dealers used multiple names; list known aliases in the `mentions` array
 
+
 ## Specialization Extraction Patterns
 
 Look for these language patterns when extracting areas of interest:
 
 **Geographic focus:**
-- "collected [region] antiquities" → South-East Asian, Egyptian, Roman, Greek, etc.
+- "collected [region] antiquities" → South-East Asian, Egyptian, Roman, etc.
 - "dealer in [region] art"
 - "specialized in objects from [location]"
-- "focused on [culture] artifacts" → Khmer, Maya, Etruscan, etc.
 
 **Temporal focus:**
-- "specialist in [period] artifacts" → Bronze Age, Tang Dynasty, Classical Period, Hellenistic, etc.
+- "specialist in [period] artifacts" → Bronze Age, Tang Dynasty, Classical Period
 - "[era] expert"
-- "collected [time period] works"
 
 **Typological focus:**
-- "focused on [object type]" → pottery, sculpture, coins, textiles, manuscripts
+- "focused on [object type]" → pottery, sculpture, coins, textiles
 - "dealt primarily in [category]"
-- "specialized in [artifact class]"
 
 **Multiple specializations:**
 - Extract all mentioned areas as an array
 - Prioritize primary specialization if explicitly stated
-- Use consistent terminology across entities (e.g., always use "South-East Asian" not "Southeast Asian" or "SE Asian")
 
 ## Reference Materials
 
@@ -115,54 +111,32 @@ See `references/known-figures.md` for reference profiles of historically signifi
 
 Always return valid JSON with this structure:
 
+
 ```json
 {
   "entities": [
     {
-      "canonical_id": "douglas_latchford",
-      "type": "PERSON",
-      "full_name": "Douglas Latchford",
-      "mentions": ["Douglas Latchford", "Latchford", "the British collector"],
+      "canonical_id": "string",
+      "type": "PERSON|ORGANIZATION|ARTIFACT|LOCATION",
+      "full_name": "string (required for PERSON, optional for others)",
+      "mentions": ["array", "of", "text", "mentions"],
       "attributes": {
-        "role": ["collector", "dealer"],
-        "nationality": "British",
-        "specialization": ["South-East Asian antiquities", "Khmer art"],
-        "active_period": "1960s-2000s"
-      }
-    },
-    {
-      "canonical_id": "metropolitan_museum",
-      "type": "ORGANIZATION",
-      "full_name": "Metropolitan Museum of Art",
-      "mentions": ["Met Museum", "Metropolitan Museum", "the Met"],
-      "attributes": {
-        "entity_type": "museum",
-        "location": "New York, USA",
-        "collection_focus": ["Ancient Near East", "Greek and Roman art", "Egyptian art"]
-      }
-    },
-    {
-      "canonical_id": "khmer_sandstone_head",
-      "type": "ARTIFACT",
-      "full_name": "Khmer Sandstone Head of Buddha",
-      "mentions": ["sandstone Buddha head", "the Khmer sculpture"],
-      "attributes": {
-        "object_type": "sculpture",
-        "origin_location": "Cambodia",
-        "estimated_date": "12th century",
-        "legal_status": "looted",
-        "current_location": "unknown"
+        "role": "string or array",
+        "nationality": "string",
+        "...other type-specific attributes"
       }
     }
   ],
   "relationships": [
     {
-      "source_id": "douglas_latchford",
-      "target_id": "khmer_sandstone_head",
-      "relation_type": "handled_by",
+      "source_id": "canonical_id",
+      "target_id": "canonical_id",
+      "relation_type": "string",
       "attributes": {
-        "date": "1970s",
-        "context": "sold through private channels"
+        "date": "YYYY or YYYY-MM-DD if known",
+        "artifact": "artifact name or canonical_id",
+        "context": "brief description if needed",
+        "source_text": "optional direct quote or page reference"
       }
     }
   ],
