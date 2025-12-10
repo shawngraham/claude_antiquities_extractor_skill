@@ -17,14 +17,14 @@ Extract four main entity types, each with a specific canonical ID format:
 
 **PERSON**: Individuals involved in the trade
 - Canonical ID: `firstname_lastname` (lowercase, underscores)
-- Attributes: role, nationality, birth/death dates, known aliases
+- Attributes: role, nationality, birth/death dates, known aliases, specialization
 - Roles include: dealer, collector, looter, archaeologist, official, restorer, consultant, auction_house_official
 - Specialization: Geographic, temporal, or typological focus (e.g., "South-East Asian antiquities", "Greek pottery", "Egyptian Middle Kingdom artifacts")
 
 **ORGANIZATION**: Institutions and businesses
 - Canonical ID: `abbreviated_name` (e.g., `j_paul_getty_museum`, `christie_s`)
 - Add `entity_type`: museum, gallery, auction_house, law_enforcement, university, customs, government, restoration_lab
-- Attributes: location, founded_date, known_involvement (if any)
+- Attributes: location, founded_date, known_involvement (if any), collection_focus
 - Collection_focus: Primary areas of collecting or dealing (e.g., "Pre-Columbian art", "Asian antiquities", "Classical Mediterranean")
 
 **ARTIFACT**: Cultural objects
@@ -51,6 +51,7 @@ Identify connections between entities with these relation types:
 - `displayed_at`: ARTIFACT → ORGANIZATION (museum exhibition)
 - `authenticated_by`: ARTIFACT → PERSON (expert who verified provenance)
 - `repatriated_to`: ARTIFACT → ORGANIZATION/LOCATION (return to origin)
+- `specialized_in`: PERSON/ORGANIZATION → SPECIALIZATION_AREA (geographic region, time period, or object type)
 
 ## Extraction Workflow
 
@@ -111,7 +112,6 @@ See `references/known-figures.md` for reference profiles of historically signifi
 
 Always return valid JSON with this structure:
 
-
 ```json
 {
   "entities": [
@@ -121,9 +121,28 @@ Always return valid JSON with this structure:
       "full_name": "string (required for PERSON, optional for others)",
       "mentions": ["array", "of", "text", "mentions"],
       "attributes": {
-        "role": "string or array",
-        "nationality": "string",
-        "...other type-specific attributes"
+        "role": "string or array (PERSON)",
+        "nationality": "string (PERSON)",
+        "birth_date": "YYYY (PERSON)",
+        "death_date": "YYYY (PERSON)",
+        "known_aliases": ["array (PERSON)"],
+        "specialization": "string or array of geographic, temporal, or typological focus (PERSON)",
+        "entity_type": "museum|gallery|auction_house|law_enforcement|university|customs|government|restoration_lab (ORGANIZATION)",
+        "location": "string (ORGANIZATION)",
+        "founded_date": "YYYY (ORGANIZATION)",
+        "known_involvement": "string (ORGANIZATION)",
+        "collection_focus": "string or array of primary collecting areas (ORGANIZATION)",
+        "object_type": "pottery|sculpture|manuscript|coin|textile|tomb_goods|etc (ARTIFACT)",
+        "origin_location": "string (ARTIFACT)",
+        "estimated_date": "string (ARTIFACT)",
+        "condition": "string (ARTIFACT)",
+        "legal_status": "looted|disputed|recovered|legitimate|unknown (ARTIFACT)",
+        "current_location": "string (ARTIFACT)",
+        "provenance_notes": "string (ARTIFACT)",
+        "location_type": "excavation_site|freeport|dealer_location|museum|auction_house|country|region (LOCATION)",
+        "country": "string (LOCATION)",
+        "significance": "string (LOCATION)",
+        "archaeological_importance": "string (LOCATION)"
       }
     }
   ],
@@ -131,7 +150,7 @@ Always return valid JSON with this structure:
     {
       "source_id": "canonical_id",
       "target_id": "canonical_id",
-      "relation_type": "string",
+      "relation_type": "looted_from|sold_to|handled_by|located_in|employed_by|collaborated_with|recovered_by|displayed_at|authenticated_by|repatriated_to|specialized_in",
       "attributes": {
         "date": "YYYY or YYYY-MM-DD if known",
         "artifact": "artifact name or canonical_id",
@@ -158,5 +177,6 @@ When extracting specializations, ensure they are:
 
 Always validate that:
 - All `source_id` and `target_id` values in relationships correspond to actual entities in the entities array
+- Use underscores, not spaces
 - Specializations use consistent terminology (create a controlled vocabulary as you extract)
 - Multiple specializations are captured when a person/organization worked across areas
